@@ -1,13 +1,14 @@
 class Solution:
     def sortedSquares(self, nums: List[int]) -> List[int]:
-        lo, hi = 0, len(nums)-1
-        answer = collections.deque()
-        while lo <= hi:
-            if abs(nums[lo]) < abs(nums[hi]):
-                answer.appendleft(nums[hi] ** 2)
-                hi = hi - 1
+        left, right = 0, len(nums) - 1
+        ans = []
+        while left <= right:
+            if abs(nums[left]) < abs(nums[right]):
+                ans.append(nums[right] ** 2)
+                right = right - 1 
             else:
-                answer.appendleft(nums[lo] ** 2)
-                lo = lo + 1
-
-        return list(answer) 
+                ans.append(nums[left] ** 2)
+                left = left + 1
+            
+        return ans[::-1]
+                
