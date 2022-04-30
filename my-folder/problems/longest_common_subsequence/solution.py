@@ -1,20 +1,23 @@
-class Solution(object):
-    def longestCommonSubsequence(self, text1, text2):
-        """
-        :type text1: str
-        :type text2: str
-        :rtype: int
-        """
-        opt = [[0 for _ in range(len(text2) + 1)] for _ in range(1 + 1)]
-        
-        for i in range(len(text1)+1):
-            for j in range(len(text2)+1):
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        a = text1
+        b = text2
+        mem = [[0 for _ in range(len(b)+1)] for _ in range(len(a)+1)]
+        pi = [[0 for _ in range(len(b)+1)] for _ in range(len(a)+1)]
+
+        for i in range(len(a)+1):
+            for j in range(len(b)+1):
                 if i == 0 or j == 0:
-                    opt[i % 2][j] = 0
+                    mem[i][j] = 0
+                    pi[i][j] = 'b'
                     continue
-                if text1[i-1] == text2[j-1]:
-                    opt[i%2][j] = opt[(i-1)%2][j-1] + 1
+                if a[i-1] == b[j-1]:
+                    mem[i][j] = mem[i-1][j-1] + 1
+                    pi[i][j] = 'd'
+                elif mem[i][j-1] >= mem[i-1][j]:
+                    mem[i][j] = mem[i][j-1]
+                    pi[i][j] = 'l'
                 else:
-                    opt[i%2][j] = max(opt[(i-1)%2][j], opt[i%2][j-1])
-                
-        return opt[len(text1) % 2][len(text2)]
+                    mem[i][j] = mem[i-1][j]
+                    pi[i][j] = 'u'
+        return (mem[len(a)][len(b)])
