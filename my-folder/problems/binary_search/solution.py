@@ -4,8 +4,7 @@ class Solution:
         
         while start <= end:
             
-            mid = start + (end - start) // 2
-            
+            mid = (start + end) // 2
             if nums[mid] == target:
                 return mid
             
@@ -14,5 +13,5 @@ class Solution:
             
             else:
                 start = mid + 1
-        
+                
         return -1
