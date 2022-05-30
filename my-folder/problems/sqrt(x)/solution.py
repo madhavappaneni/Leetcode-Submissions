@@ -1,13 +1,18 @@
 class Solution:
     def mySqrt(self, x: int) -> int:
-        if x == 1 or x == 2 or x == 3:
-            return 1
-        prev = 0
-        for i in range(x):
-            sqr = i * i
-            if prev < x and x < sqr:
-                return i - 1
-            elif x == sqr:
-                return i
-            prev = sqr
-        return 0
+        lo, hi = 0, x - 1
+        
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            
+            if mid ** 2 == x:
+                return mid
+            
+            elif mid ** 2 < x:
+                if (mid + 1) ** 2 > x:
+                    return mid
+                lo = mid + 1
+            
+            else:
+                hi = mid - 1
+        return lo
