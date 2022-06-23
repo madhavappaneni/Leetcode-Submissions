@@ -7,19 +7,16 @@
 class Solution:
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         if root == None:
-            return root
-        d = deque()
-        d.append(root)
-        res = []
-        while d:
-            l = len(d)
-            for i in range(l):
-                e = d.popleft()
-                if i == l - 1:
-                    res.append(e.val)
-                if e.left:
-                    d.append(e.left)
-                if e.right:
-                    d.append(e.right)
-        return res
+            return []
+        
+        rightside = []
+        
+        def helper(node, level):
+            if level == len(rightside):
+                rightside.append(node.val)
+            for child in [node.right, node.left]:
+                if child:
+                    helper(child, level + 1)
                     
+        helper(root, 0)
+        return rightside
