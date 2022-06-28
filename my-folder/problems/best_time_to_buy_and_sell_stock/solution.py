@@ -1,12 +1,14 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        largestDifference = 0
-        minSoFar = 1000000
+        largestDiff = float("-inf")
+        leastIndex = 0
+        i = 0
         
-        for i in range(len(prices)):
-            if (prices[i] < minSoFar):
-                minSoFar = prices[i]
+        for i in range(1, len(prices)):
+            if prices[i] > prices[leastIndex]:
+                largestDiff = max(largestDiff, prices[i] - prices[leastIndex])
             else:
-                largestDifference = max(largestDifference, prices[i] - minSoFar)
-        return largestDifference
-                
+                leastIndex = i
+        return largestDiff if largestDiff > 0 else 0
+            
+        
