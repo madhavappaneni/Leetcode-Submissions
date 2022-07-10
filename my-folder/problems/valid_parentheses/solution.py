@@ -1,27 +1,20 @@
-from collections import deque
-
 class Solution:
     def isValid(self, s: str) -> bool:
-        deq = deque()
-        bracket_map = {
-            '{': '}',
-            '[': ']',
-            '(': ')'
+        d = deque()
+        bracketMap = {
+            "(": ")",
+            "{": "}",
+            "[": "]"
         }
-        opening_brackets = bracket_map.keys()
-        if(len(s) == 1): 
-            return False
-        for i in range(len(s)):
-            element = s[i]
-            if element in opening_brackets:
-                deq.append(element)
+        for char in s:
+            if char in ['(', '[', '{']:
+                d.append(char)
             else:
-                if deq:
-                    removed_element = deq.pop()
-                    if (bracket_map[removed_element] != s[i]):
+                if len(d) > 0:
+                    p = d.pop()
+                    if bracketMap[p] != char:
                         return False
                 else:
                     return False
-        if deq:
-            return False
-        return True
+                
+        return True if len(d) == 0 else False
