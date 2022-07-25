@@ -8,18 +8,15 @@ class Node:
 
 class Solution:
     def cloneGraph(self, node: 'Node') -> 'Node':
-        oldToNew = {}
-        
-        def dfs(node):
-            if node in oldToNew:
-                return oldToNew[node]
-            
-            copy = Node(node.val)
-            oldToNew[node] = copy
-            
-            for neighbor in node.neighbors:
-                copy.neighbors.append(dfs(neighbor))
-            
-            return copy
-        
-        return dfs(node) if node else None
+        visited = {}
+        def helper(node):
+            if node == None:
+                return None
+            if node in visited:
+                return visited[node]
+            newNode = Node(node.val, [])
+            visited[node] = newNode
+            for nei in node.neighbors:
+                newNode.neighbors.append(helper(nei))
+            return newNode
+        return helper(node)        
