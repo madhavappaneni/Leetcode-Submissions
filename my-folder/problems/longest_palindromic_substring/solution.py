@@ -1,28 +1,23 @@
-
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        
         n = len(s)
-        # Form a bottom-up dp 2d array
-        # dp[i][j] will be 'true' if the string from index i to j is a palindrome. 
-        dp = [[False] * n  for _ in range(n)]
+        dp = [[False] * (n+1) for _ in range(n+1)]
         
-        ans = ''
-        # every string with one character is a palindrome
-        for i in range(n):
+        maxAns = ""
+        
+        for i in range(n + 1):
             dp[i][i] = True
-            ans = s[i]
-            
-        maxLen = 1
-        for start in range(n-1, -1, -1):
-            for end in range(start+1, n):             
-				# palindrome condition
-                if s[start] == s[end]:
-                    # if it's a two char. string or if the remaining string is a palindrome too
-                    if end - start == 1 or dp[start+1][end-1]:
-                        dp[start][end] = True
-                        if maxLen < end - start + 1:
-                            maxLen = end - start + 1
-                            ans = s[start: end+ 1]
+            if i < n:
+                maxAns = s[i]
         
-        return ans
+        maxLen = -1
+        
+        for i in range(1, n + 1):
+            for j in range(1, i):
+                if s[i-1] == s[j-1] and (i - j <= 2 or dp[i-1][j+1]):
+                    if maxLen < i - j + 1:
+                        maxLen = i - j + 1
+                        maxAns = s[j-1:i]
+                    dp[i][j] = True
+        return maxAns
+                    
