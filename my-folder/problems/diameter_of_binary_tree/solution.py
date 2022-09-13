@@ -7,13 +7,15 @@
 class Solution:
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         diameter = 0
-        def helper(node):
+        def dfs(root):
             nonlocal diameter
-            if not node:
+            if not root:
                 return 0
-            left = helper(node.left)
-            right = helper(node.right)
+            left = dfs(root.left)
+            right = dfs(root.right)
+            height = 1 + max(left, right)
             diameter = max(diameter, left + right)
-            return max(left, right) + 1
-        helper(root)
+            
+            return height
+        dfs(root)
         return diameter
