@@ -6,22 +6,15 @@
 #         self.right = right
 class Solution:
     def goodNodes(self, root: TreeNode) -> int:
-        if root == None:
-            return 0
-        
         count = 0
-
-        def helper(node, maxValue):
-            nonlocal count
+        if not root:
+            return count
+        stack = collections.deque([(root, float('-inf'))])
+        while stack:
+            node, maxValue = stack.pop()
             if node.val >= maxValue:
                 count += 1
+            if node.left: stack.appendleft((node.left, max(node.val, maxValue)))
+            if node.right: stack.appendleft((node.right, max(node.val, maxValue)))
+        return count                
             
-            if node.left:
-                helper(node.left, max(maxValue, node.val))
-            
-            if node.right:
-                helper(node.right, max(maxValue, node.val))
-        
-        helper(root, root.val)
-        
-        return count
