@@ -1,11 +1,14 @@
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        def backtrack(first, curr):
-            out.append(curr[:])
-            for idx in range(first, len(nums)):
-                curr.append(nums[idx])
-                backtrack(idx + 1, curr)
-                curr.pop()
-        out = []
-        backtrack(0, [])
-        return out
+        output = []
+        def helper(counter, prefix):
+            # print('test', counter, prefix)
+            output.append(prefix.copy())
+            for i in range(counter, len(nums)):
+                prefix.append(nums[i])
+                helper(i + 1, prefix)
+                prefix.pop()
+
+            return
+        helper(0, [])
+        return output
