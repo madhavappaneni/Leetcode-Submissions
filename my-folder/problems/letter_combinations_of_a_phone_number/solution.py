@@ -1,24 +1,15 @@
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        numberLetterMap = {
-            "2": "abc",
-            "3": "def",
-            "4": "ghi",
-            "5": "jkl",
-            "6": "mno",
-            "7": "pqrs",
-            "8": "tuv",
-            "9": "wxyz"
-        }
+        letters = {"2": "abc", "3": "def", "4": "ghi", "5": "jkl", "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"}
         out = []
-        
-        def dfs(idx, comb):
-            if idx == len(digits):
-                len(comb) > 0 and out.append(comb[:])
+        def helper(currIdx, prefix):
+            if currIdx < 0 or currIdx > 9:
                 return
-            if idx > len(digits) or idx < 0:
-                return
-            for letter in numberLetterMap[digits[idx]]:
-                dfs(idx + 1, comb + letter)
-        dfs(0, "")
+            elif currIdx == len(digits):
+                if prefix != "":
+                    out.append(prefix)
+            else:
+                for letter in letters[digits[currIdx]]:
+                    helper(currIdx + 1, prefix + letter)
+        helper(0, "")
         return out
