@@ -1,22 +1,21 @@
 class Solution:
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
-        Sum = sum(nums)
-        if abs(target) > Sum:
-            return 0
-        if (target + Sum) % 2 != 0:
-            return 0
-        target = round((sum(nums) + target) // 2)
-        
-        dp = [[0] * (target + 1) for _ in range(len(nums) + 1)]
-        for row in range(len(nums) + 1):
-            for col in range(target + 1):
-                if col == 0:
-                    dp[row][col] = 1
-        for row in range(1, len(nums) + 1):
-            for col in range(target + 1):
-                if nums[row - 1] <= col:
-                    dp[row][col] = dp[row - 1][col] + dp[row - 1][col - nums[row - 1]]
+        count = [0]
+        targetSumMap = [[-1] * (len(nums) + 1) for _ in range(2 * sum(nums) + 1)]
+        def helper(idx, currTarget):
+            print(idx, currTarget, "test")
+            if idx == len(nums):
+                if currTarget == target:
+                    return 1
                 else:
-                    dp[row][col] = dp[row - 1][col]
-        return dp[-1][-1]
-                    
+                    return 0
+            else:
+                if targetSumMap[currTarget + sum(nums)][idx] != -1:
+                    return targetSumMap[currTarget + sum(nums)][idx]
+                add = helper(idx + 1, currTarget + nums[idx])
+                sub = helper(idx + 1, currTarget - nums[idx])
+                targetSumMap[currTarget + sum(nums)][idx] = add + sub
+                return add + sub
+        return helper(0, 0)
+            
+            
