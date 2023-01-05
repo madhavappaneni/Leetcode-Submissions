@@ -1,41 +1,29 @@
 # Definition for a binary tree node.
-# class TreeNode(object):
+# class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class Solution(object):
-    from collections import deque
-    def zigzagLevelOrder(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
-        out = deque()
-        deq = deque()
-        deq.append(root)
+class Solution:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
-            return []
-        direction = 1
-        while deq:
-            count = len(deq)
+            return
+        queue = deque([root])
+        out = []
+        currDir = 1
+        while queue:
+            queueLen = len(queue)
             levelOut = deque()
-            while count > 0:
-                if direction == -1:
-                    element = deq.popleft()
-                    levelOut.appendleft(element.val)
-                    if element.left:
-                        deq.append(element.left)
-                    if element.right:
-                        deq.append(element.right)
-                elif direction == 1:
-                    element = deq.popleft()
-                    levelOut.append(element.val)
-                    if element.left:
-                        deq.append(element.left)
-                    if element.right:
-                        deq.append(element.right)
-                count -= 1
-            direction *= -1
+            for i in range(queueLen):
+                p = queue.popleft()
+                if currDir == 1:
+                    levelOut.append(p.val)
+                else:
+                    levelOut.appendleft(p.val)
+                if p.left:
+                    queue.append(p.left)
+                if p.right:
+                    queue.append(p.right)
             out.append(levelOut)
-        return list(out)
+            currDir *= -1
+        return out
