@@ -1,19 +1,17 @@
 class Solution:
     def arrangeCoins(self, n: int) -> int:
-        lo, hi = 0, n
-        
-        while lo <= hi:
-            mid = (lo + hi) // 2
-            sumOfN = self.sumN(mid)
-            
-            if sumOfN == n:
+        low, high = 0, n
+
+        while low <= high:
+            mid = (low + high) >> 1
+
+            num = (mid * (mid + 1)) // 2
+
+            if n == num:
                 return mid
-            elif sumOfN > n:
-                hi = mid - 1
+            elif num > n:
+                high = mid - 1
             else:
-                lo = mid + 1
-        return hi
+                low = mid + 1
         
-        
-    def sumN(self, n):
-        return n * (n + 1) / 2
+        return high
