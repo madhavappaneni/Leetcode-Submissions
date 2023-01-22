@@ -1,15 +1,12 @@
-class Solution:
-    def convertToBase7(self, num: int) -> str:
-        out = []
-        sign = '-' if num < 0 else ""
-        num = abs(num)
-        if num == 0:
-            return "0"
-        while num > 0:
-            num, rem = divmod(num, 7)
-            out.append(rem)
-        if sign == "-":
-            return (sign)+''.join([str(i) for i in out[::-1]])
-        else:
-            return ''.join([str(i) for i in out[::-1]])
+class Solution(object):
+    def convertToBase7(self, num):
+        """
+        :type num: int
+        :rtype: str
+        """
+        n, res = abs(num), ''
+        while n > 0:
+            res = str(n % 7) + res
+            n /= 7
+        return '-' * (num < 0) + res or "0"
             
