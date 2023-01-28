@@ -1,7 +1,14 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        totalProfit = 0
-        for i in range(1, len(prices)):
-            if prices[i] > prices[i-1]:
-                totalProfit += prices[i] - prices[i-1]
-        return totalProfit
+        total = 0
+        peak = 100001
+        valley = 100001
+        for price in prices:
+            if price < peak:
+                total += peak - valley
+                valley = price
+                peak = price
+            else:
+                peak = price
+        total += peak - valley
+        return total
