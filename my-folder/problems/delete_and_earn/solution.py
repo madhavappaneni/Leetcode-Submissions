@@ -1,21 +1,31 @@
 class Solution:
     def deleteAndEarn(self, nums: List[int]) -> int:
+        # points = defaultdict(int)
+        # maxNum = float('-inf')
+        # for num in nums:
+        #     points[num] += num
+        #     maxNum = max(maxNum, num)
+        
+        # @lru_cache(None)
+        # def solve(num):
+        #     if num == 0:
+        #         return 0
+        #     if num == 1:
+        #         return points[num]
+        #     return max(solve(num - 1), solve(num - 2) + points[num])
+        
+        # return solve(maxNum)
+
         points = defaultdict(int)
-        max_number = 0
-        # Precompute how many points we gain from taking an element
+        maxNum = float('-inf')
         for num in nums:
             points[num] += num
-            max_number = max(max_number, num)
+            maxNum = max(maxNum, num)
 
-        @cache
-        def max_points(num):
-            # Check for base cases
-            if num == 0:
-                return 0
-            if num == 1:
-                return points[1]
-            
-            # Apply recurrence relation
-            return max(max_points(num - 1), max_points(num - 2) + points[num])
+        dp = [0] * (maxNum + 1)
+        dp[0] = 0
+        dp[1] = points[1]
+        for i in range(2, len(dp)):
+            dp[i] = max(dp[i-1], dp[i-2] + points[i])
         
-        return max_points(max_number)
+        return max(dp)
