@@ -1,15 +1,16 @@
 class Solution:
     def checkSubarraySum(self, nums: List[int], k: int) -> bool:
-        if len(nums) < 2:
-            return False
+        h = {0: 0}
         currSum = 0
-        h = defaultdict(int)
-        h[0] = -1
-        for idx, num in enumerate(nums):
-            # print(idx, currSum, currSum %k, h)
-            currSum += num
+
+        for i, val in enumerate(nums):
+            currSum += val
+
             if currSum % k not in h:
-                h[currSum % k] = idx
-            elif idx - h[currSum % k] >= 2:
+                h[currSum % k] = i + 1
+            
+            elif h[currSum % k] < i:
                 return True
+
         return False
+            
