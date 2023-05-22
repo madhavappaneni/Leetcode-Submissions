@@ -1,16 +1,16 @@
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
-        d = Counter()
-        i, j = 0, 0
-        maxAns = 0
-        while i < len(s) and j < len(s):
-            d[s[j]] += 1
-            vals = d.values()
-            maxAns = max(maxAns, d[s[j]])
-            if j - i + 1 > maxAns + k:
-                d[s[i]] -= 1
-                i += 1
+        maxCount = 0
 
-            j += 1
-            # print(d, i, j, maxAns)
-        return len(s) - i
+        charSet = defaultdict(int)
+        maxLen = 0
+        l = 0
+        for r in range(len(s)):
+            charSet[s[r]] += 1
+            maxCount = max(maxCount, charSet[s[r]])
+            if r - l + 1 - maxCount > k:
+                charSet[s[l]] -= 1
+                l += 1
+            maxLen = max(maxLen, r - l + 1)
+        
+        return maxLen
