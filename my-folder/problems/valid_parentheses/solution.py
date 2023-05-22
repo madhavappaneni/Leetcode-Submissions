@@ -1,20 +1,21 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        d = deque()
-        bracketMap = {
-            "(": ")",
-            "{": "}",
-            "[": "]"
+        stack = []
+        br_map = {
+            ']': '[',
+            '}': '{',
+            ')': '('
         }
-        for char in s:
-            if char in ['(', '[', '{']:
-                d.append(char)
+
+        for br in s:
+            if br in ['[', '(', '{']:
+                stack.append(br)
             else:
-                if len(d) > 0:
-                    p = d.pop()
-                    if bracketMap[p] != char:
+                if stack:
+                    e = stack.pop()
+                    if br not in br_map or br_map[br] != e:
                         return False
                 else:
                     return False
-                
-        return True if len(d) == 0 else False
+
+        return True if len(stack) == 0 else False
