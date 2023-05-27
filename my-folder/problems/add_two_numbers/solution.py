@@ -5,19 +5,21 @@
 #         self.next = next
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
-        out = outDummy = ListNode()
+        out = ListNode(None)
+        curr = out
         carry = 0
+
         while l1 or l2 or carry != 0:
             val1 = l1.val if l1 else 0
             val2 = l2.val if l2 else 0
-            res = val1 + val2 + carry
-            
-            carry = res // 10
-            out.next = ListNode(res % 10)
-            
+            colSum = val1 + val2 + carry
+            carry = colSum // 10
+            remSum = colSum % 10
+            curr.next = ListNode(remSum)
+            curr = curr.next
             l1 = l1.next if l1 else None
             l2 = l2.next if l2 else None
-            out = out.next
+        
+        return out.next
+
             
-            
-        return outDummy.next
