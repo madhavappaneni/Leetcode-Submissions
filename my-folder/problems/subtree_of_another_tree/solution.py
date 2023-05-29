@@ -6,15 +6,15 @@
 #         self.right = right
 class Solution:
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
-        if not root:
-            return False
-        if not subRoot:
+        if root:
+            if self.checkIfSame(root, subRoot):
+                return True
+            else:
+                return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+
+    def checkIfSame(self, root, subRoot):
+        if not root and not subRoot:
             return True
-        return self.isSameTree(root, subRoot) or self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
-    
-    def isSameTree(self, p, q):
-        if not p and not q:
-            return True
-        if not p or not q:
-            return False
-        return p.val == q.val and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        if root and subRoot:
+            return root.val == subRoot.val and self.checkIfSame(root.left, subRoot.left) and self.checkIfSame(root.right, subRoot.right)
+        
