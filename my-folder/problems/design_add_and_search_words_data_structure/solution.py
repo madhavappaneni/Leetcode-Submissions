@@ -4,29 +4,33 @@ class WordDictionary:
         self.trie = {}
 
     def addWord(self, word: str) -> None:
-        node = self.trie
-        for char in word:
-            if char not in node:
-                node[char] = {}
-            node = node[char]
-        node['$'] = True
+        curr = self.trie
+        for ch in word:
+            if ch not in curr:
+                curr[ch] = {} 
+            curr = curr[ch]       
+        curr['$'] = True
 
     def search(self, word: str) -> bool:
-        
-        def searchHelper(word, node):
-            for i, char in enumerate(word):
-                if char not in node:
-                    if char == '.':
-                        for x in node:
-                            if x != '$' and searchHelper(word[i+1:], node[x]):
+        curr = self.trie
+
+        def helper(word, node):
+            for idx, ch in enumerate(word):
+                if ch not in node:
+                    if ch == '.':
+                        for elem in node:
+                            if elem != '$' and helper(word[idx + 1: ], node[elem]):
                                 return True
                     return False
                 else:
-                    node = node[char]
+                    node = node[ch]
             return '$' in node
-        return searchHelper(word, self.trie)
+        
+        return helper(word, curr)
+                        
 
         
+
 
 # Your WordDictionary object will be instantiated and called as such:
 # obj = WordDictionary()
