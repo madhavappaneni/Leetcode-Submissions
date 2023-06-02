@@ -1,31 +1,44 @@
 class Twitter:
 
     def __init__(self):
-        self.connections = collections.defaultdict(set)
-        self.tweets = []
+        self.count = 0
+        self.tweetMap = defaultdict(list)
+        self.followMap = defaultdict(set)
 
     def postTweet(self, userId: int, tweetId: int) -> None:
-        self.tweets.append((userId, tweetId))
-        return
+        self.tweetMap[userId].append([self.count, tweetId])
+        self.count -= 1
+
 
     def getNewsFeed(self, userId: int) -> List[int]:
         res = []
-        i=len(self.tweets)-1
-        while i>=0 and len(res)<10:
-            if self.tweets[i][0] in self.connections[userId] or self.tweets[i][0]==userId:
-                res.append(self.tweets[i][1])
-            i-=1
+        minHeap = []
+        self.followMap[userId].add(userId)
+        for followeeId in self.followMap[userId]:
+            if followeeId in self.tweetMap:
+                index = len(self.tweetMap[followeeId]) - 1
+                count, tweetId = self.tweetMap[followeeId][index]
+                minHeap.append([count, tweetId, followeeId, index - 1])
+        
+        heapq.heapify(minHeap)
+
+        while minHeap and len(res) < 10:
+            count, tweetId, followeeId, index = heappop(minHeap)
+            res.append(tweetId)
+
+            if index >= 0:
+                count, tweetId = self.tweetMap[followeeId][index]
+                heappush(minHeap, [count, tweetId, followeeId, index - 1])
+        
         return res
 
+
     def follow(self, followerId: int, followeeId: int) -> None:
-        # print(self.connections)
-        self.connections[followerId].add(followeeId)
-        # print(self.connections)
-        return
+        self.followMap[followerId].add(followeeId)
 
     def unfollow(self, followerId: int, followeeId: int) -> None:
-        if followeeId in self.connections[followerId]:
-            self.connections[followerId].remove(followeeId)
+        if followeeId in self.followMap[followerId]:
+            self.followMap[followerId].remove(followeeId)
 
 
 # Your Twitter object will be instantiated and called as such:
