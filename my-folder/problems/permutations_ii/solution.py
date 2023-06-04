@@ -1,18 +1,22 @@
 class Solution:
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         out = []
-        def helper(first, nums):
-            print(first, nums)
-            if first == len(nums):
-                out.append(nums[:])
-            lookup = set()
+        nums.sort()
 
-            for i in range(first, len(nums)):
-                if nums[i] not in lookup:
-                    nums[i], nums[first] = nums[first], nums[i]
-                    helper(first + 1, nums)
-                    nums[i], nums[first] = nums[first], nums[i]
-                    lookup.add(nums[i])
-        helper(0, nums)
-        return out
+        def backtrack(currIdx):
+            if currIdx == len(nums):
+                out.append(nums.copy())
+
+            lookup = set()
             
+            for i in range(currIdx, len(nums)):
+                if nums[i] not in lookup:
+                    lookup.add(nums[i])
+                    nums[currIdx], nums[i] = nums[i], nums[currIdx]
+                    backtrack(currIdx + 1)
+                    nums[currIdx], nums[i] = nums[i], nums[currIdx]
+            
+            return
+
+        backtrack(0)
+        return out
