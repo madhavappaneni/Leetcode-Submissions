@@ -1,14 +1,16 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         out = []
-        n = len(nums)
-        def helper(currIdx):
-            if currIdx == n:
+
+        def backtrack(currIdx):
+            if currIdx == len(nums):
                 out.append(nums.copy())
-            else:
-                for idx in range(currIdx, n):
-                    nums[currIdx], nums[idx] = nums[idx], nums[currIdx]
-                    helper(currIdx + 1)
-                    nums[currIdx], nums[idx] = nums[idx], nums[currIdx]
-        helper(0)
+            for i in range(currIdx, len(nums)):
+                nums[currIdx], nums[i] = nums[i], nums[currIdx]
+                backtrack(currIdx + 1)
+                nums[currIdx], nums[i] = nums[i], nums[currIdx]
+            
+            return
+
+        backtrack(0)
         return out
