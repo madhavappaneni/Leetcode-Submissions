@@ -2,15 +2,21 @@ class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         out = []
 
-        def helper(remTarget, startIndex, currArr):
-            if remTarget < 0 or startIndex > len(candidates) - 1:
+        def helper(currIdx, currCandidate, currTarget):
+            if currTarget == 0:
+                out.append(currCandidate[:])
                 return
-            elif remTarget == 0:
-                out.append(currArr.copy())
-            else:
-                for idx in range(startIndex, len(candidates)):
-                    currArr.append(candidates[idx])
-                    helper(remTarget-candidates[idx], idx, currArr)
-                    currArr.pop()
-        helper(target, 0, [])
+            
+            if currTarget < 0:
+                return
+            
+            for i in range(currIdx, len(candidates)):
+                currCandidate.append(candidates[i])
+                helper(i, currCandidate, currTarget - candidates[i])
+                currCandidate.pop()
+            
+            return
+        
+        helper(0, [], target)
+
         return out
