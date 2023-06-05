@@ -1,19 +1,29 @@
 class Solution:
     def makesquare(self, matchsticks: List[int]) -> bool:
         
-        target = sum(matchsticks) / 4
-        if target != int(target): return False
-        k = 4
-        sides = [0] * k
+        edgeLen = sum(matchsticks) / 4
+
+        if int(edgeLen) != edgeLen:
+            return False
+
+        sides = [0,0,0,0]
         matchsticks.sort(reverse=True)
-        def helper(currIdx):
+
+        def backtrack(currIdx):
             if currIdx == len(matchsticks):
                 return True
-            for j in range(k):
-                if sides[j] + matchsticks[currIdx] > target: continue
-                sides[j] += matchsticks[currIdx]
-                if helper(currIdx + 1): return True
-                sides[j] -= matchsticks[currIdx]
-        return helper(0)
-        
+            
+            for i in range(4):
+                if sides[i] + matchsticks[currIdx] > edgeLen:
+                    continue
 
+                sides[i] += matchsticks[currIdx] 
+                if backtrack(currIdx + 1):
+                    return True
+
+                sides[i] -= matchsticks[currIdx]
+            
+            return False
+        
+        return backtrack(0)
+        
