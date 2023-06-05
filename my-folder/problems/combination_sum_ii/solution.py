@@ -2,16 +2,23 @@ class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         out = []
         candidates.sort()
-        def helper(currArr, remTarget, currIndex):
-            if remTarget < 0:
+
+        def helper(currIdx, currCandidate, currTarget):
+            if currTarget == 0:
+                out.append(currCandidate[:])
                 return
-            elif remTarget == 0:
-                out.append(currArr.copy())
-            for i in range(currIndex, len(candidates)):
-                if candidates[i] == candidates[i-1] and i != currIndex:
+            
+            if currTarget < 0:
+                return
+            
+            for i in range(currIdx, len(candidates)):
+                if i != currIdx and candidates[i] == candidates[i - 1]:
                     continue
-                currArr.append(candidates[i])
-                helper(currArr, remTarget - candidates[i], i + 1)
-                currArr.pop()
-        helper([], target, 0)
+                currCandidate.append(candidates[i])
+                helper(i + 1, currCandidate, currTarget - candidates[i])
+                currCandidate.pop()
+            return
+        
+        helper(0, [], target)
+
         return out
