@@ -1,20 +1,27 @@
 class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        
 
-    def helper(self, row, col, suffix, board):
+        def helper(suffix, i, j):
             if len(suffix) == 0:
                 return True
-            if row < 0 or col < 0 or row > len(board) - 1 or col > len(board[0]) - 1 or board[row][col] != suffix[0]:
+            
+            if i < 0 or j < 0 or i >= len(board) or j >= len(board[0]) or board[i][j] != suffix[0]:
                 return False
-            temp = board[row][col]
-            board[row][col] = '#'
-            res = self.helper(row+1 , col, suffix[1:], board) or self.helper(row , col + 1, suffix[1:], board) or self.helper(row-1 , col, suffix[1:], board) or self.helper(row , col-1, suffix[1:], board)
-            board[row][col] = suffix[0]
-            return res
+            board[i][j] = '#'
+            ans = helper(suffix[1:], i + 1, j) \
+                or helper(suffix[1:], i, j + 1) \
+                or helper(suffix[1:], i - 1, j) \
+                or helper(suffix[1:], i, j - 1)
 
-    def exist(self, board: List[List[str]], word: str) -> bool:
-        for i in range(len(board)):
-            for  j in range(len(board[0])):
-                if self.helper(i, j, word, board):
+            board[i][j] = suffix[0]
+            return ans
+
+
+        for row in range(len(board)):
+            for col in range(len(board[0])):
+                if helper(word, row, col):
                     return True
         return False
+            
             
