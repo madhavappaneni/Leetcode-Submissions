@@ -27,29 +27,42 @@ class UnionFind:
             else:
                 self.root[rootX] = rootY
                 self.rank[rootY] += 1
-    def getRootArr(self):
-        return self.root
-
 class Solution:
     def smallestStringWithSwaps(self, s: str, pairs: List[List[int]]) -> str:
         uf = UnionFind(len(s))
-        for pair in pairs:
-            uf.union(pair[0], pair[1])
-        rootCharMap = collections.defaultdict(list)
-        roots = set(uf.getRootArr())
-        for idx, elem in enumerate(uf.getRootArr()):
-            elemRoot = uf.find(elem)
-            rootCharMap[elemRoot].append(idx)
-        out = [None] * len(s)
-        for (idx, (k, v)) in enumerate(rootCharMap.items()):
-            charArr = [s[i] for i in v]
-            charArr.sort()
-            j = 0
-            for i in v:
-                out[i] = charArr[j]
-                j += 1
-        return ''.join(out)
 
-            
+        for u, v in pairs:
+            uf.union(u, v)
+
+        h = defaultdict(list)
+        out = [None] * len(s)
+        for idx, val in enumerate(uf.root):
+            root = uf.find(val)
+            h[root].append(idx)
+
+        for vals in (h.values()):
+            for i, val in zip((vals), sorted([s[i] for i in vals])):
+                out[i] = val
         
-        
+        return ''.join(out)
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
