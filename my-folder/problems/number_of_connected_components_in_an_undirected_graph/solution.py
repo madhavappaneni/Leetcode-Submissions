@@ -1,24 +1,38 @@
+class UnionFind:
+    def __init__(self, size):
+        self.root = [None] * size
+        self.rank = [1] * size
+        for i in range(size):
+            self.root[i] = i
+        
+    def find(self, x):
+        if x == self.root[x]:
+            return x
+        self.root[x] = self.find(self.root[x])
+        return self.root[x]
+    
+    def connected(self, x, y):
+        rootX = self.find(x)
+        rootY = self.find(y)
+        return rootX == rootY
+    
+    def union(self, x, y):
+        rootX = self.find(x)
+        rootY = self.find(y)
+        if rootX != rootY:
+            if self.rank[rootX] > self.rank[rootY]:
+                self.root[rootY] = rootX
+            elif self.rank[rootY] > self.rank[rootX]:
+                self.root[rootX] = rootY
+            else:
+                self.root[rootX] = rootY
+                self.rank[rootY] += 1
+
 class Solution:
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
-        seen = set()
-        adjList = collections.defaultdict(list)
+        uf = UnionFind(n)
 
         for u, v in edges:
-            adjList[u].append(v)
-            adjList[v].append(u)
+            uf.union(u, v)
         
-        def dfs(node):
-            if node in seen:
-                return 
-            seen.add(node)
-            for nei in adjList[node]:
-                dfs(nei)
-            
-        count = 0
-
-        for i in range(n):
-            if i not in seen:
-                dfs(i)
-                count += 1
-
-        return count
+        return len(set([uf.find(i) for i in range(n)]))
