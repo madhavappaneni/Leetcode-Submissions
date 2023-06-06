@@ -1,24 +1,23 @@
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
-        countS1 = Counter(s1)
-        countS2 = Counter()
-        s1Keys = list(countS1.keys())
+        if len(s2) < len(s1):
+            return False
+        h1 = defaultdict(int)
+        for c in s1:
+            h1[c] += 1
+        h2 = defaultdict(int)
+        for i in range(len(s1)):
+            h2[s2[i]] += 1
+        if h1 == h2:
+            return True 
 
-        def checkSimilarity():
-
-            for key in s1Keys:
-                if countS2[key] != countS1[key]:
-                    return False
-            return True
+        for i in range(len(s1), len(s2)):
+            if h2[s2[i-len(s1)]] > 1:
+                h2[s2[i-len(s1)]] -= 1
+            else:
+                del h2[s2[i-len(s1)]]
+            h2[s2[i]] += 1
+            if h1 == h2:
+                return True 
         
-        for i in range(len(s2)):
-            countS2[s2[i]] += 1
-            if i - len(s1) >= 0:
-                countS2[s2[i - len(s1)]] -= 1
-            # print(countS2)
-            if checkSimilarity():
-                return True
         return False
-            
-        
-    
