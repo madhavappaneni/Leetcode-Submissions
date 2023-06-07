@@ -9,17 +9,21 @@ class Node:
 """
 
 class Solution:
-    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+    def connect(self, root: 'Optional[Node]', n = None) -> 'Optional[Node]':
         if not root:
-            return root
+            return
+        
         leftmost = root
-
+        
         while leftmost.left:
-            curr = leftmost
-            while curr:
-                curr.left.next = curr.right
-                if curr.next:
-                    curr.right.next = curr.next.left
-                curr = curr.next
+            head = leftmost
+            
+            while head:
+                head.left.next = head.right
+                
+                if head.next:
+                    head.right.next = head.next.left
+                
+                head = head.next
             leftmost = leftmost.left
         return root
