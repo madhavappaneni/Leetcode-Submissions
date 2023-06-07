@@ -1,31 +1,29 @@
 class Solution:
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-        adjList = collections.defaultdict(list)
-        visitMap = collections.defaultdict(list)
+        adjList = defaultdict(list)
+        tickets.sort()
+        for src, dest in tickets:
+            adjList[src].append(dest)
         
-        for source, destination in tickets:
-            adjList[source].append(destination)
+        path = ["JFK"]
 
-        for k, v in adjList.items():
-            v.sort()
-            visitMap[k] = [False] * len(v)
-        self.path = ['JFK']
-
-        def dfs(node, route):
-            if len(route) == len(tickets) + 1:
-                self.path = route                
+        def dfs(node):
+            if len(path) == len(tickets) + 1:
                 return True
-            for i, nei in enumerate(adjList[node]):
-                if not visitMap[node][i]:
-                    visitMap[node][i] = True
-                    ret = dfs(nei, route + [nei])
-                    visitMap[node][i] = False
-                    if ret:
-                        return True
-            return False
+            if node not in adjList:
+                return False
 
-        
-        dfs("JFK", ["JFK"])
+            temp = adjList[node].copy()
+            
+            for i, v in enumerate(temp):
+                path.append(v)
+                adjList[node].pop(i)
 
-        return self.path
-        
+                if dfs(v):
+                    return True
+
+                path.pop()
+                adjList[node].insert(i, v)
+
+        dfs("JFK")
+        return path
