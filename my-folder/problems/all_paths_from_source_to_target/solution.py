@@ -1,16 +1,15 @@
 class Solution:
     def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        queue = deque([[0]])
+        # seen = set()
+        # seen.add(0)
+        n = len(graph)
+        res = []
+        while queue:
+            path = queue.popleft()
 
-        seen = set([0])
-        deq = collections.deque([[0, [0]]])
-        paths = []
-        while deq:
-            node, path = deq.pop()
-            if node == len(graph) - 1:
-                paths.append(path.copy())
-            for nei in graph[node]:
-                if nei not in seen:
-                    deq.append([nei, path + [nei]])
-        
-        return paths
-                    
+            if path[-1] == n - 1:
+                res.append(path)
+
+            queue.extend([path + [nei] for nei in graph[path[-1]]])
+        return res
