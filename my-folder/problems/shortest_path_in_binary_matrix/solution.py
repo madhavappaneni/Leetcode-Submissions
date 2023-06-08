@@ -1,29 +1,52 @@
 class Solution:
     def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:
-        ROW_MAX = len(grid) - 1
-        COL_MAX = len(grid[0]) - 1
-        directions = [(-1, 0), (-1, -1), (0, -1), (1, 0),
-                      (1, -1), (-1, 1), (1, 1), (0, 1)]
-
-        if grid[0][0] != 0 or grid[-1][-1] != 0:
+        n = len(grid)
+        
+        if grid[0][0] != 0 or grid[n - 1][n - 1] != 0:
             return -1
-        def getNeighbors(row, col):
-            for dr, dc in directions:
-                new_row, new_col = row + dr, col + dc
-                if new_row < 0 or new_row > ROW_MAX or new_col < 0 or new_col > COL_MAX or grid[new_row][new_col] != 0:
-                    continue
-                yield (new_row, new_col)
 
-        queue = collections.deque()
-        queue.append((0, 0))
+        directions = [
+            [-1, -1],
+            [-1, 0],
+            [-1, 1],
+            [0, -1],
+            [0, 1],
+            [1, -1],
+            [1, 0],
+            [1, 1],
+        ]
+
+        def getNeighbors(row, col):
+            neis = []
+            for dr, dc in directions:
+                newR, newC = row + dr, col + dc
+                if 0 <= newR < n and 0 <= newC < n and grid[newR][newC] == 0:
+                    neis.append([newR, newC])
+            return neis
+
+        # def getNeighbors(row, col):
+        #     for row_difference, col_difference in directions:
+        #         new_row = row + row_difference
+        #         new_col = col + col_difference
+        #         if not(0 <= new_row <= n - 1 and 0 <= new_col <= n - 1):
+        #             continue
+        #         if grid[new_row][new_col] != 0:
+        #             continue
+        #         yield (new_row, new_col)
+        
+        queue = deque([[0, 0]])
+
         grid[0][0] = 1
 
         while queue:
-            row, col = queue.popleft()
-            distance = grid[row][col]
-            if (row, col) == (ROW_MAX, COL_MAX):
-                return distance
-            for nei_row, nei_col in getNeighbors(row, col):
-                grid[nei_row][nei_col] = distance + 1
-                queue.append((nei_row, nei_col))
+            r, c = queue.popleft()
+            currDistance = grid[r][c]
+
+            if r == n - 1 and c == n - 1:
+                return currDistance
+
+            for neiR, neiC in getNeighbors(r, c):
+                grid[neiR][neiC] = currDistance + 1
+                queue.append([neiR, neiC])
+
         return -1
