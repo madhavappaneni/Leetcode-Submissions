@@ -32,9 +32,8 @@ class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
         maxVertex = 0
         graph = collections.defaultdict(list)
-        for edge in edges:
-            maxVertex = max(maxVertex, edge[0], edge[1])
-        uf = UnionFind(maxVertex + 1)
+  
+        uf = UnionFind(len(edges) + 1)
         ans = None
         for edge in edges:
             if uf.connected(edge[0], edge[1]):
