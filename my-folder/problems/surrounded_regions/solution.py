@@ -3,29 +3,34 @@ class Solution:
         """
         Do not return anything, modify board in-place instead.
         """
-        nRows, nCols = len(board), len(board[0])
-        
-        def dfs(i, j):
-            if i < 0 or j < 0 or i == nRows or j == nCols or board[i][j] != "O":
+
+        def dfs(r, c):
+            if r not in range(len(board)) or c not in range(len(board[0])) or board[r][c] != 'P':
                 return
-            board[i][j] = "T"
             
-            dfs(i, j-1)
-            dfs(i-1, j)
-            dfs(i+1, j)
-            dfs(i, j+1)
+            board[r][c] = 'O'
+
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+            
+            return
+
+        borderZeros = set()
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == 'O':
+                    if i in [0, len(board) - 1] or j in [0, len(board[0]) - 1]:
+                        borderZeros.add((i, j))
+                    board[i][j] = 'P'
         
+        for r, c in borderZeros:
+            dfs(r, c)
         
-        for i in range(nRows):
-            for j in range(nCols):
-                if (i in [0, nRows - 1] or j in [0, nCols - 1]) and board[i][j] == "O":
-                        dfs(i, j)
-        for i in range(nRows):
-            for j in range(nCols):
-                if board[i][j] == "O":
-                    board[i][j] = "X"
-                if board[i][j] == "T":
-                    board[i][j] = "O"
-                
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == 'P':
+                    board[i][j] = 'X'
         
-                    
