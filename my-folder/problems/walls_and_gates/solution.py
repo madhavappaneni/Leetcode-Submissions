@@ -3,22 +3,28 @@ class Solution:
         """
         Do not return anything, modify rooms in-place instead.
         """
-        q = deque()
-        ROWS, COLS = len(rooms), len(rooms[0])
-        for i in range(ROWS):
-            for j in range(COLS):
+        queue = deque([])
+        for i in range(len(rooms)):
+            for j in range(len(rooms[0])):
                 if rooms[i][j] == 0:
-                    q.append((i,j))
-        while q:
-            for i in range(len(q)):
-                r, c = q.pop()
-                directions = [(0,1),(0,-1),(1,0),(-1,0)]
+                    queue.append((i, j))
+        
+        directions = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+
+        distance = 0
+        while queue:
+            # print(queue)
+            queueLen = len(queue)
+            for i in range(queueLen):
+                r, c = queue.popleft()
                 for dr, dc in directions:
-                    row, col = r + dr, c + dc
-                    if row not in range(ROWS) \
-                    or col not in range(COLS) \
-                    or rooms[row][col] == -1:
-                        continue
-                    elif rooms[row][col] > rooms[r][c] + 1:
+                    row = r + dr
+                    col = c + dc
+                    if row in range(len(rooms)) and col in range(len(rooms[0])) and rooms[row][col] == 2147483647:
                         rooms[row][col] = rooms[r][c] + 1
-                        q.append((row, col))
+                        queue.append((row, col))
+
+        
+                        
+
+            
