@@ -1,16 +1,16 @@
 class Solution:
     def partitionLabels(self, s: str) -> List[int]:
-        lastIndexMap = {}
-        for i, v in enumerate(s):
-            lastIndexMap[v] = i
-        size = 0
+        endOccurance = defaultdict(int)
+        for i,ch in enumerate(s):
+            endOccurance[ch] = i
         out = []
-        start, end = 0, 0
-        for i, v in enumerate(s):
+        maxEndIdx = -1
+        size = 0
+        for i, ch in enumerate(s):
+            endIdx = endOccurance[ch]
             size += 1
-            if lastIndexMap[v] > end:
-                end = lastIndexMap[v]
-            if i == end:
+            maxEndIdx = max(endIdx, maxEndIdx)
+            if i == maxEndIdx:
                 out.append(size)
                 size = 0
-        return (out)
+        return out
