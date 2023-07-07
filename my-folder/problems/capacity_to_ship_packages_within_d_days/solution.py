@@ -1,21 +1,28 @@
 class Solution:
     def shipWithinDays(self, weights: List[int], days: int) -> int:
-        def feasible(capacity):
-            nDays = 1
-            total = 0
+        
+        def isInFeasible(cap):
+            currCap = 0
+            numTrips = 0
+
             for weight in weights:
-                total += weight
-                if total > capacity:
-                    nDays += 1
-                    total = weight
-            return nDays <= days
+                if weight + currCap <= cap:
+                    currCap = currCap + weight
+                else:
+                    currCap = weight
+                    numTrips += 1
+            
+            return numTrips >= days
+
 
         low, high = max(weights), sum(weights)
+
         while low < high:
             mid = (low + high) >> 1
 
-            if feasible(mid):
-                high = mid
-            else:
+            if isInFeasible(mid):
                 low = mid + 1
+            else:
+                high = mid
+        
         return low
